@@ -1,1 +1,609 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CONEXXA OS — El centro de mando para operar tu negocio con claridad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --acid: #C6FF00;
+  --core: #050505;
+  --panel: #0A0C0F;
+  --surface: #0F1215;
+  --surface2: #141820;
+  --border: #1A2030;
+  --border2: #222A38;
+  --text-1: #FFFFFF;
+  --text-2: #8B9AB0;
+  --text-3: #3D4A5C;
+  --green: #2ECC00;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Geist', sans-serif; background: var(--core); color: var(--text-1); overflow-x: hidden; cursor: none; }
+
+#cur { position:fixed; width:8px; height:8px; background:var(--acid); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; }
+#cur-ring { position:fixed; width:30px; height:30px; border:1px solid rgba(198,255,0,0.3); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:transform .06s linear; }
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 6%; height:60px;
+  background:rgba(5,5,5,0.82); backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(198,255,0,0.07);
+}
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.logo img { width:28px; height:28px; }
+.logo-txt { font-size:17px; font-weight:900; letter-spacing:-0.4px; color:#fff; }
+.logo-txt em { color:var(--acid); font-style:normal; }
+.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-links a { font-size:13px; font-weight:500; color:var(--text-2); text-decoration:none; transition:color .2s; }
+.nav-links a:hover { color:#fff; }
+
+/* HERO */
+.hero {
+  position:relative; min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:100px 6% 80px; text-align:center; overflow:hidden;
+}
+.hero-grid {
+  position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    linear-gradient(rgba(198,255,0,0.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(198,255,0,0.065) 1px, transparent 1px);
+  background-size:56px 56px;
+}
+.hero-grid::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 50%, var(--core) 100%);
+}
+.hero-glow {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:900px; height:650px; pointer-events:none; z-index:1;
+  background:radial-gradient(ellipse 55% 50% at 50% 15%, rgba(198,255,0,0.13) 0%, rgba(198,255,0,0.03) 50%, transparent 70%);
+}
+#hmg {
+  position:absolute; pointer-events:none; z-index:1;
+  width:550px; height:550px;
+  background:radial-gradient(circle, rgba(198,255,0,0.07) 0%, transparent 65%);
+  transform:translate(-50%,-50%);
+  transition:left .1s linear, top .1s linear;
+  opacity:0;
+}
+.hero-inner { position:relative; z-index:2; max-width:880px; }
+
+.hero-title {
+  font-size:clamp(46px, 6.5vw, 96px);
+  font-weight:900; line-height:.97; letter-spacing:-3px; color:#fff;
+  margin-bottom:28px;
+}
+.hero-title .acid { color:var(--acid); }
+.hero-desc {
+  font-size:clamp(16px, 1.8vw, 19px);
+  color:var(--text-2); max-width:640px; margin:0 auto 32px; line-height:1.68;
+}
+.hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:64px; }
+.btn-p {
+  padding:13px 30px; background:var(--acid); color:#000; font-size:15px; font-weight:700;
+  border:none; border-radius:8px; cursor:none; text-decoration:none;
+  transition:transform .15s, box-shadow .15s;
+}
+.btn-p:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(198,255,0,0.26); }
+.btn-s {
+  padding:13px 30px; background:transparent; color:#fff; font-size:15px; font-weight:600;
+  border:1px solid var(--border2); border-radius:8px; cursor:none; text-decoration:none;
+  transition:border-color .2s, background .2s;
+}
+.btn-s:hover { border-color:rgba(198,255,0,0.35); background:rgba(198,255,0,0.04); }
+
+/* MOCKUP */
+.mockup-wrap { position:relative; z-index:2; width:100%; max-width:1020px; margin:0 auto; }
+.mframe {
+  background:var(--surface); border:1px solid rgba(198,255,0,0.1); border-radius:14px;
+  overflow:hidden; box-shadow:0 2px 0 rgba(198,255,0,0.05) inset, 0 40px 100px rgba(0,0,0,0.75);
+}
+.mbar {
+  display:flex; align-items:center; gap:8px; padding:11px 20px;
+  background:var(--panel); border-bottom:1px solid var(--border);
+}
+.mdot { width:10px; height:10px; border-radius:50%; }
+.mbar-url {
+  margin-left:10px; flex:1; background:var(--border); border-radius:4px;
+  padding:4px 12px; font-size:11px; color:var(--text-3); font-family:'JetBrains Mono',monospace;
+  max-width:260px;
+}
+.mbar-ok {
+  margin-left:auto; display:flex; align-items:center; gap:5px;
+  font-size:10px; font-weight:700; color:var(--green); font-family:'JetBrains Mono',monospace;
+}
+.gdot { width:5px; height:5px; background:var(--green); border-radius:50%; animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.mlayout { display:grid; grid-template-columns:180px 1fr; min-height:400px; }
+
+/* sidebar */
+.msb { background:rgba(0,0,0,0.22); border-right:1px solid var(--border); padding:16px 0; }
+.msb-lbl { font-size:9px; font-weight:700; color:var(--text-3); letter-spacing:.14em; text-transform:uppercase; padding:0 14px 5px; margin-top:12px; }
+.msb-lbl:first-child { margin-top:0; }
+.msb-row {
+  display:flex; align-items:center; gap:8px; padding:6px 14px;
+  font-size:12px; color:var(--text-2); border-left:2px solid transparent;
+  transition:background .15s, color .15s;
+}
+.msb-row.on { color:var(--acid); background:rgba(198,255,0,0.06); border-left-color:var(--acid); }
+.msb-ico { width:13px; height:13px; flex-shrink:0; opacity:.45; }
+.msb-row.on .msb-ico { opacity:1; filter:brightness(0) saturate(100%) invert(90%) sepia(50%) saturate(500%) hue-rotate(30deg) brightness(110%); }
+.msb-sep { height:1px; background:var(--border); margin:10px 14px; }
+
+/* main */
+.mm { padding:22px 22px; display:flex; flex-direction:column; gap:16px; }
+.mm-hdr { display:flex; align-items:flex-start; justify-content:space-between; }
+.mm-title { font-size:16px; font-weight:800; color:#fff; }
+.mm-sub { font-size:10px; color:var(--text-3); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+.mm-badge {
+  display:flex; align-items:center; gap:5px; padding:3px 10px;
+  background:rgba(46,204,0,0.07); border:1px solid rgba(46,204,0,0.16);
+  border-radius:100px; font-size:9px; font-weight:700; color:var(--green);
+  font-family:'JetBrains Mono',monospace; letter-spacing:.04em;
+}
+
+/* metric cards */
+.mmetrics { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.mmc {
+  background:var(--panel); border:1px solid var(--border); border-radius:7px;
+  padding:12px 14px; position:relative; overflow:hidden;
+}
+.mmc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--acid); }
+.mmc.b::before { background:#4A9EFF; }
+.mmc.g::before { background:var(--green); }
+.mmc.p::before { background:#A855F7; }
+.mmc-lbl { font-size:9px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
+.mmc-val { font-size:21px; font-weight:900; color:#fff; letter-spacing:-0.5px; }
+.mmc-sub { font-size:10px; color:var(--green); font-family:'JetBrains Mono',monospace; margin-top:3px; }
+.mmc-sub.r { color:#FF6B6B; }
+.mmc-sub.p { color:#A855F7; }
+
+/* bottom row */
+.mbottom { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.mcard { background:var(--panel); border:1px solid var(--border); border-radius:7px; padding:14px; }
+.mcard-t { font-size:9px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.1em; margin-bottom:10px; }
+
+/* module checks */
+.mod-row {
+  display:flex; align-items:center; gap:8px; padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04); font-size:11px; color:var(--text-2);
+}
+.mod-row:last-child { border:none; }
+.mod-chk {
+  width:15px; height:15px; flex-shrink:0; border-radius:3px;
+  display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:900;
+}
+.mod-chk.on { background:var(--acid); color:#000; }
+.mod-chk.off { border:1px solid var(--border2); color:transparent; }
+.mod-badge {
+  margin-left:auto; font-size:9px; font-weight:700; padding:1px 6px;
+  border-radius:100px; font-family:'JetBrains Mono',monospace;
+}
+.mod-badge.a { background:rgba(198,255,0,0.1); color:var(--acid); }
+.mod-badge.n { background:rgba(74,158,255,0.1); color:#4A9EFF; }
+
+/* integration rows */
+.irow {
+  display:flex; align-items:center; justify-content:space-between; padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04); font-size:11px;
+}
+.irow:last-child { border:none; }
+.irow-n { color:var(--text-2); display:flex; align-items:center; gap:6px; }
+.irow-ico { font-size:12px; }
+.irow-s { font-size:9px; font-weight:700; padding:2px 7px; border-radius:100px; font-family:'JetBrains Mono',monospace; }
+.irow-s.on { background:rgba(46,204,0,0.1); color:var(--green); }
+.irow-s.cfg { background:rgba(255,140,66,0.1); color:#FF8C42; }
+
+/* SECTIONS */
+section { padding:96px 6%; position:relative; }
+.si { max-width:1140px; margin:0 auto; }
+.slbl { font-size:10px; font-weight:700; color:var(--acid); letter-spacing:.14em; text-transform:uppercase; font-family:'JetBrains Mono',monospace; margin-bottom:14px; }
+.stitle { font-size:clamp(28px,4vw,52px); font-weight:900; line-height:1.04; letter-spacing:-1.5px; color:#fff; margin-bottom:16px; }
+.ssub { font-size:17px; color:var(--text-2); max-width:540px; line-height:1.7; }
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border2),transparent); }
+
+/* PAIN */
+.pgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:48px; }
+.pcard {
+  background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+  padding:26px; transition:border-color .2s, transform .2s;
+}
+.pcard:hover { border-color:rgba(198,255,0,0.2); transform:translateY(-2px); }
+.pcard-ico { font-size:22px; margin-bottom:14px; }
+.pcard-t { font-size:15px; font-weight:700; color:#fff; margin-bottom:8px; }
+.pcard-d { font-size:13px; color:var(--text-2); line-height:1.6; }
+
+/* SOL */
+.sol-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-top:48px; }
+.sol-col { padding:34px 26px; background:var(--surface); border-right:1px solid var(--border); position:relative; }
+.sol-col:last-child { border-right:none; }
+.sol-col::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--acid); }
+.sol-col:nth-child(2)::before { background:var(--green); }
+.sol-col:nth-child(3)::before { background:#4A9EFF; }
+.sol-n { font-size:10px; font-weight:700; color:var(--acid); font-family:'JetBrains Mono',monospace; letter-spacing:.1em; margin-bottom:12px; }
+.sol-col:nth-child(2) .sol-n { color:var(--green); }
+.sol-col:nth-child(3) .sol-n { color:#4A9EFF; }
+.sol-h { font-size:20px; font-weight:800; color:#fff; margin-bottom:10px; }
+.sol-d { font-size:13px; color:var(--text-2); line-height:1.7; }
+
+/* CTA */
+.cta-section { padding:110px 6%; text-align:center; position:relative; overflow:hidden; }
+.cta-section::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 60% 65% at 50% 50%, rgba(198,255,0,0.08) 0%, transparent 65%);
+}
+.cta-title { font-size:clamp(34px,5.5vw,74px); font-weight:900; color:#fff; letter-spacing:-2.5px; line-height:.97; margin-bottom:20px; position:relative; z-index:1; }
+.cta-title .acid { color:var(--acid); }
+.cta-sub { font-size:17px; color:var(--text-2); max-width:520px; margin:0 auto 36px; line-height:1.7; position:relative; z-index:1; }
+.cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+.btn-wa {
+  padding:13px 28px; background:#25D366; color:#fff; font-size:15px; font-weight:700;
+  border:none; border-radius:8px; cursor:none; text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px; transition:transform .15s, box-shadow .15s;
+}
+.btn-wa:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(37,211,102,0.24); }
+
+/* FOOTER */
+footer { background:var(--panel); border-top:1px solid var(--border); padding:48px 6% 32px; }
+.ft { max-width:1140px; margin:0 auto; }
+.ft-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:36px; margin-bottom:36px; }
+.ft-logo { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
+.ft-logo img { width:24px; height:24px; }
+.ft-logo-txt { font-size:17px; font-weight:900; color:#fff; }
+.ft-logo-txt em { color:var(--acid); font-style:normal; }
+.ft-desc { font-size:13px; color:var(--text-3); line-height:1.7; max-width:240px; }
+.ft-col-t { font-size:11px; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; }
+.ft-links { list-style:none; }
+.ft-links li { margin-bottom:9px; }
+.ft-links a { font-size:13px; color:var(--text-3); text-decoration:none; transition:color .2s; }
+.ft-links a:hover { color:var(--acid); }
+.ft-bottom { border-top:1px solid var(--border); padding-top:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.ft-copy { font-size:12px; color:var(--text-3); font-family:'JetBrains Mono',monospace; }
+.ft-legal { display:flex; gap:18px; }
+.ft-legal a { font-size:12px; color:var(--text-3); text-decoration:none; transition:color .2s; }
+.ft-legal a:hover { color:var(--text-2); }
+
+/* REVEAL */
+.r { opacity:0; transform:translateY(18px); transition:opacity .55s ease, transform .55s ease; }
+.r.v { opacity:1; transform:none; }
+.d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s} .d4{transition-delay:.32s}
+
+@media(max-width:900px){
+  .nav-links{display:none}
+  .mlayout{grid-template-columns:1fr}
+  .msb{display:none}
+  .mmetrics{grid-template-columns:repeat(2,1fr)}
+  .mbottom{grid-template-columns:1fr}
+  .sol-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){.ft-top{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <img src="data:image/png;base64,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" alt="CONEXXA" />
+    <span class="logo-txt">CONE<em>XX</em>A</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#producto">Producto</a></li>
+    <li><a href="#modulos">Módulos</a></li>
+    <li><a href="#casos">Casos de uso</a></li>
+    <li><a href="#integraciones">Integraciones</a></li>
+    <li><a href="#como-funciona">Proceso</a></li>
+  </ul>
+  <a href="#demo" class="btn-p" style="font-size:13px;padding:8px 18px">Solicitar demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div id="hmg"></div>
+
+  <div class="hero-inner">
+    <h1 class="hero-title r">
+      El centro de mando<br>para operar tu negocio<br>con <span class="acid">claridad.</span>
+    </h1>
+    <p class="hero-desc r">
+      Centralizá clientes, tareas, métricas, equipo, procesos e integraciones en un solo sistema. Diseñado para dueños, ecommerce, consultores y SaaS que quieren dejar de improvisar y escalar con control.
+    </p>
+    <div class="hero-btns r">
+      <a href="#demo" class="btn-p">Solicitar demo</a>
+      <a href="#modulos" class="btn-s">Ver módulos</a>
+    </div>
+
+    <!-- DASHBOARD MOCKUP -->
+    <div class="mockup-wrap r">
+      <div class="mframe">
+        <div class="mbar">
+          <div class="mdot" style="background:#FF5F57"></div>
+          <div class="mdot" style="background:#FEBC2E"></div>
+          <div class="mdot" style="background:#28C840"></div>
+          <div class="mbar-url">app.conexxa.os / dashboard</div>
+          <div class="mbar-ok"><div class="gdot"></div>OS ACTIVO</div>
+        </div>
+        <div class="mlayout">
+          <!-- SIDEBAR -->
+          <div class="msb">
+            <div class="msb-lbl">Sistema</div>
+            <div class="msb-row on">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+              Dashboard
+            </div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="4.5" r="2.5"/><path d="M1.5 12.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg>
+              Clientes
+            </div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 3.5h10M2 7h7M2 10.5h8.5"/></svg>
+              Tareas
+            </div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1.5 11 L4.5 7 L7 8.5 L10 4.5 L12.5 2.5"/></svg>
+              Métricas
+            </div>
+            <div class="msb-sep"></div>
+            <div class="msb-lbl">Operación</div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="1.5" width="11" height="11" rx="2"/><path d="M4.5 7l2 2 3-3"/></svg>
+              Shopify
+            </div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><circle cx="7" cy="7" r="5.5"/></svg>
+              Integraciones
+            </div>
+            <div class="msb-row">
+              <svg class="msb-ico" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="4" cy="4" r="2"/><circle cx="10" cy="4" r="2"/><circle cx="7" cy="10" r="2"/><path d="M4 6v2M10 6v2M5.5 10h-2m7 0h-2"/></svg>
+              Mi Equipo
+            </div>
+          </div>
+
+          <!-- MAIN -->
+          <div class="mm">
+            <div class="mm-hdr">
+              <div>
+                <div class="mm-title">Centro de Comando</div>
+                <div class="mm-sub">cmd.overview · sync hace 2m</div>
+              </div>
+              <div class="mm-badge"><div class="gdot"></div>SISTEMA ACTIVO</div>
+            </div>
+
+            <div class="mmetrics">
+              <div class="mmc">
+                <div class="mmc-lbl">Ventas</div>
+                <div class="mmc-val">$84K</div>
+                <div class="mmc-sub">↑ vs semana anterior</div>
+              </div>
+              <div class="mmc g">
+                <div class="mmc-lbl">Módulos Activos</div>
+                <div class="mmc-val">9</div>
+                <div class="mmc-sub">de 10 disponibles</div>
+              </div>
+              <div class="mmc b">
+                <div class="mmc-lbl">Tareas Pendientes</div>
+                <div class="mmc-val">12</div>
+                <div class="mmc-sub r">3 vencidas</div>
+              </div>
+              <div class="mmc p">
+                <div class="mmc-lbl">Trabajo Ahorrado</div>
+                <div class="mmc-val">5h</div>
+                <div class="mmc-sub p">esta semana</div>
+              </div>
+            </div>
+
+            <div class="mbottom">
+              <div class="mcard">
+                <div class="mcard-t">Módulos de tu cuenta</div>
+                <div class="mod-row"><div class="mod-chk on">✓</div>Dashboard<span class="mod-badge a">Activo</span></div>
+                <div class="mod-row"><div class="mod-chk on">✓</div>Clientes<span class="mod-badge a">Activo</span></div>
+                <div class="mod-row"><div class="mod-chk on">✓</div>Tareas<span class="mod-badge a">Activo</span></div>
+                <div class="mod-row"><div class="mod-chk on">✓</div>Métricas Shopify<span class="mod-badge a">Activo</span></div>
+                <div class="mod-row"><div class="mod-chk off">✓</div>Brain IA<span class="mod-badge n">Nuevo</span></div>
+                <div class="mod-row"><div class="mod-chk off">✓</div>CRM<span class="mod-badge n">Nuevo</span></div>
+              </div>
+              <div class="mcard">
+                <div class="mcard-t">Estado Integraciones</div>
+                <div class="irow"><span class="irow-n"><span class="irow-ico">🛍️</span>Shopify</span><span class="irow-s on">Conectado</span></div>
+                <div class="irow"><span class="irow-n"><span class="irow-ico">📧</span>Klaviyo</span><span class="irow-s on">Conectado</span></div>
+                <div class="irow"><span class="irow-n"><span class="irow-ico">📣</span>Meta Ads</span><span class="irow-s cfg">Configurando</span></div>
+                <div class="irow"><span class="irow-n"><span class="irow-ico">💬</span>WhatsApp</span><span class="irow-s cfg">Configurando</span></div>
+                <div class="irow"><span class="irow-n"><span class="irow-ico">🗄️</span>Supabase</span><span class="irow-s on">Conectado</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section style="background:var(--panel);padding:96px 6%" id="producto">
+  <div class="si">
+    <div class="r">
+      <div class="slbl">El problema</div>
+      <h2 class="stitle">Tu negocio creció.<br>Tu operación sigue dispersa.</h2>
+      <p class="ssub">Seguís creciendo desde WhatsApp, Excel, memoria y herramientas desconectadas. El resultado es pérdida de visibilidad, atrasos y dependencia total del dueño.</p>
+    </div>
+    <div class="pgrid">
+      <div class="pcard r d1"><div class="pcard-ico">📂</div><div class="pcard-t">Información dispersa</div><div class="pcard-d">Clientes en hojas, tareas en chats, métricas en cinco apps distintas. Nadie tiene la foto completa.</div></div>
+      <div class="pcard r d2"><div class="pcard-ico">⏳</div><div class="pcard-t">Tareas sin seguimiento</div><div class="pcard-d">Los pendientes se pierden. Sin responsables, sin fechas, sin sistema real de ejecución.</div></div>
+      <div class="pcard r d3"><div class="pcard-ico">📉</div><div class="pcard-t">Métricas desconectadas</div><div class="pcard-d">Los datos existen pero están separados. Las decisiones se toman sin contexto ni visibilidad.</div></div>
+      <div class="pcard r d4"><div class="pcard-ico">🔥</div><div class="pcard-t">Dueño apaga incendios</div><div class="pcard-d">Sin sistema, el dueño es el sistema. Todo pasa por él. Eso no escala.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section style="padding:96px 6%;">
+  <div class="si">
+    <div class="r">
+      <div class="slbl">La solución</div>
+      <h2 class="stitle">Tu operación convertida<br>en un sistema visible,<br>medible y delegable.</h2>
+      <p class="ssub">Un solo panel para ver qué pasa, quién ejecuta, qué está atrasado y qué decisiones tomar para escalar con más control.</p>
+    </div>
+    <div class="sol-grid r">
+      <div class="sol-col"><div class="sol-n">01 / ORDEN</div><div class="sol-h">Visible</div><div class="sol-d">Todo centralizado: clientes, tareas, notas, equipo y métricas. Dejás de buscar información en cinco lugares distintos.</div></div>
+      <div class="sol-col"><div class="sol-n">02 / DATOS</div><div class="sol-h">Medible</div><div class="sol-d">KPIs, avances, métricas Shopify y estado por cliente en tiempo real. Tomás decisiones con datos, no con intuición.</div></div>
+      <div class="sol-col"><div class="sol-n">03 / SISTEMA</div><div class="sol-h">Delegable</div><div class="sol-d">Roles, permisos, procesos documentados e integraciones activas. Tu empresa deja de depender del dueño.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODULES -->
+<section style="background:var(--panel);padding:96px 6%" id="modulos">
+  <div class="si">
+    <div class="r">
+      <div class="slbl">Plataforma</div>
+      <h2 class="stitle">Todo tu negocio<br>conectado por módulos.</h2>
+      <p class="ssub">Cada módulo resuelve un problema operativo específico. Juntos forman tu sistema operativo completo.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:48px">
+      <div class="pcard r" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">⚡</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Dashboard</div><div style="font-size:11px;color:var(--text-3)">Centro de comando</div></div>
+      <div class="pcard r d1" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">👥</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Clientes</div><div style="font-size:11px;color:var(--text-3)">Gestión centralizada</div></div>
+      <div class="pcard r d2" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">✅</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Tareas</div><div style="font-size:11px;color:var(--text-3)">Seguimiento operativo</div></div>
+      <div class="pcard r d3" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">📝</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Notas OS</div><div style="font-size:11px;color:var(--text-3)">Sistema de notas</div></div>
+      <div class="pcard r d4" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">📊</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Métricas</div><div style="font-size:11px;color:var(--text-3)">KPIs y avances</div></div>
+      <div class="pcard r" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">🛍️</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Shopify</div><div style="font-size:11px;color:var(--text-3)">Métricas de tienda</div></div>
+      <div class="pcard r d1" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">🔗</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Integraciones</div><div style="font-size:11px;color:var(--text-3)">Conectá tus apps</div></div>
+      <div class="pcard r d2" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">👤</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Mi Equipo</div><div style="font-size:11px;color:var(--text-3)">Roles y permisos</div></div>
+      <div class="pcard r d3" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">🔔</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Notificaciones</div><div style="font-size:11px;color:var(--text-3)">Alertas en tiempo real</div></div>
+      <div class="pcard r d4" style="padding:18px 16px"><div style="font-size:20px;margin-bottom:9px">⚙️</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Configuración</div><div style="font-size:11px;color:var(--text-3)">Ajustes del sistema</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTEGRATIONS -->
+<section style="padding:96px 6%" id="integraciones">
+  <div class="si">
+    <div class="r">
+      <div class="slbl">Integraciones</div>
+      <h2 class="stitle">Conectá tus herramientas.<br>Centralizá tus decisiones.</h2>
+      <p class="ssub">CONEXXA se conecta con las herramientas que ya usás y convierte sus datos en información accionable dentro de tu panel.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:48px">
+      <div class="pcard r" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">🛍️</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">Shopify</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(46,204,0,0.1);color:var(--green);font-family:'JetBrains Mono',monospace;text-transform:uppercase">Disponible</span></div>
+      <div class="pcard r d1" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">💬</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">WhatsApp</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(74,158,255,0.1);color:#4A9EFF;font-family:'JetBrains Mono',monospace;text-transform:uppercase">En desarrollo</span></div>
+      <div class="pcard r d2" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">📧</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">Klaviyo</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(74,158,255,0.1);color:#4A9EFF;font-family:'JetBrains Mono',monospace;text-transform:uppercase">En desarrollo</span></div>
+      <div class="pcard r d3" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">📣</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">Meta Ads</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(74,158,255,0.1);color:#4A9EFF;font-family:'JetBrains Mono',monospace;text-transform:uppercase">En desarrollo</span></div>
+      <div class="pcard r d4" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">📊</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">Google Analytics</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(74,158,255,0.1);color:#4A9EFF;font-family:'JetBrains Mono',monospace;text-transform:uppercase">En desarrollo</span></div>
+      <div class="pcard r" style="padding:18px;text-align:center"><div style="font-size:24px;margin-bottom:8px">🗄️</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:6px">Supabase</div><span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(46,204,0,0.1);color:var(--green);font-family:'JetBrains Mono',monospace;text-transform:uppercase">Disponible</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA FINAL -->
+<section class="cta-section" id="demo">
+  <div class="r" style="max-width:740px;margin:0 auto">
+    <h2 class="cta-title">Convertí tu operación<br>en un sistema <span class="acid">escalable.</span></h2>
+    <p class="cta-sub">CONEXXA OS convierte tu operación diaria en un sistema visible, medible y delegable. La estructura que tu negocio necesita para escalar con control.</p>
+    <div class="cta-btns">
+      <a href="mailto:hola@getconexxa.com" class="btn-p">Solicitar demo</a>
+      <a href="https://wa.me/50688888888" class="btn-wa">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Hablar por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="ft-top">
+      <div>
+        <div class="ft-logo">
+          <img src="data:image/png;base64,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" alt="CONEXXA" />
+          <span class="ft-logo-txt">CONE<em>XX</em>A</span>
+        </div>
+        <p class="ft-desc">El sistema operativo empresarial para ordenar, medir y escalar negocios con estructura.</p>
+      </div>
+      <div>
+        <div class="ft-col-t">Producto</div>
+        <ul class="ft-links">
+          <li><a href="#producto">Dashboard</a></li>
+          <li><a href="#modulos">Módulos</a></li>
+          <li><a href="#integraciones">Integraciones</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-col-t">Compañía</div>
+        <ul class="ft-links">
+          <li><a href="#demo">Solicitar demo</a></li>
+          <li><a href="mailto:hola@getconexxa.com">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-col-t">Legal</div>
+        <ul class="ft-links">
+          <li><a href="#">Términos</a></li>
+          <li><a href="#">Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2025 CONEXXA OS · getconexxa.com</span>
+      <div class="ft-legal"><a href="#">Términos</a><a href="#">Privacidad</a><a href="mailto:hola@getconexxa.com">Contacto</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+const hmg = document.getElementById('hmg');
+const hero = document.querySelector('.hero');
+
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+  if (hero) {
+    const r = hero.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+      hmg.style.left = (e.clientX - r.left) + 'px';
+      hmg.style.top = (e.clientY - r.top) + 'px';
+      hmg.style.opacity = '1';
+    } else { hmg.style.opacity = '0'; }
+  }
+});
+document.addEventListener('mousedown', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.4)'; });
+document.addEventListener('mouseup', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+
+document.querySelectorAll('.pcard').forEach(c => {
+  c.addEventListener('mousemove', e => {
+    const r = c.getBoundingClientRect();
+    c.style.background = `radial-gradient(circle at ${e.clientX-r.left}px ${e.clientY-r.top}px, rgba(198,255,0,0.06), transparent 70%), var(--surface2)`;
+  });
+  c.addEventListener('mouseleave', () => { c.style.background = ''; });
+});
+
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('v'); }), {threshold:0.1});
+document.querySelectorAll('.r').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
